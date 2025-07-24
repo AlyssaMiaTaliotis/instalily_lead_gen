@@ -17,7 +17,7 @@ import {
   Loader2
 } from 'lucide-react';
 
-const API_BASE = 'https://instalily-lead-gen.onrender.com/';
+const API_BASE = 'https://instalily-lead-gen.onrender.com';
 
 // Mock data for development/demo
 const mockDashboardStats = {
@@ -76,8 +76,8 @@ const mockTaskStatus = {
   results: {
     events_found: 8,
     companies_analyzed: 156,
-    qualified_leads: 23,
-    outreach_generated: 18
+    qualified_leads: 3,
+    outreach_generated: 2
   }
 };
 
