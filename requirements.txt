@@ -10,6 +10,7 @@ requests
 beautifulsoup4
 selenium
 chromedriver-autoinstaller
+pandas
 
 
 awscli==1.41.10
