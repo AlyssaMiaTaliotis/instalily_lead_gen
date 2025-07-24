@@ -419,22 +419,24 @@ const App = () => {
 
             {/* Industry Alignment */}
             <div className="bg-blue-50 rounded-lg p-4 mb-6">
-              <div className="flex items-center justify-between">
-                <span className="text-blue-900 font-semibold">Qualification Score</span>
-                <div className="flex items-center">
-                  <Star className="h-5 w-5 text-yellow-500 mr-2" />
-                  <span className="text-2xl font-bold text-blue-900">
-                    {(lead.qualification_score * 100).toFixed(0)}%
-                  </span>
-                </div>
-              </div>
-              {lead.qualification_reasons && lead.qualification_reasons.length > 0 && (
+              {(lead.qualification_reasons && lead.qualification_reasons.length > 0) ? (
                 <div className="mt-4">
                   <span className="text-blue-900 font-semibold">Rationale:</span>
                   <ul className="list-disc ml-6 mt-2 text-blue-800 text-sm">
                     {lead.qualification_reasons.map((reason, idx) => (
                       <li key={idx}>{reason}</li>
                     ))}
+                  </ul>
+                </div>
+              ) : (
+                <div className="mt-4">
+                  <span className="text-blue-900 font-semibold">Rationale:</span>
+                  <ul className="list-disc ml-6 mt-2 text-blue-800 text-sm">
+                    <li>
+                      {lead.qualification_score >= 0.8
+                        ? "This lead is qualified as it has a qualification score above 0.8."
+                        : "This lead is not qualified as its qualification score is below 0.8."}
+                    </li>
                   </ul>
                 </div>
               )}
