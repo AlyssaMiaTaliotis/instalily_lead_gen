@@ -1,0 +1,111 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.pyd
+*.pyc
+
+# Python virtual environments
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Logs and local data
+*.log
+*.sqlite3
+*.db
+*.bak
+*.swp
+*.tmp
+
+# Virtualenv/Poetry/pipenv files
+pip-log.txt
+pip-delete-this-directory.txt
+poetry.lock
+Pipfile.lock
+
+# Test/coverage/output
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# MyPy, Pyright, and pylance
+.mypy_cache/
+.pyre/
+.pytype/
+
+# dotenv environment variables
+.env
+.env.*
+.venv
+*.env
+
+# FastAPI static files / uploads (customize if you upload files!)
+uploads/
+media/
+staticfiles/
+
+# Node (React)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build artifacts (React/Node)
+build/
+dist/
+.cache/
+*.tsbuildinfo
+
+# Editor/IDE/OS files
+.DS_Store
+*.sublime-workspace
+*.sublime-project
+.vscode/
+.idea/
+*.iml
+*.bak
+*.tmp
+
+# Misc
+*.orig
+*.old
+*.pid
+Thumbs.db
+desktop.ini
+
+# Local server overrides/configs
+local_settings.py
+
+# Output from docker, composer, etc.
+docker-compose.override.yml
+docker-compose.local.yml
+
+# Mac
+.DS_Store
+
+# Windows thumbnail cache
+Thumbs.db
+
+# Python-wheel packaging
+*.whl
+
+# Optional: secrets
+secrets.json
