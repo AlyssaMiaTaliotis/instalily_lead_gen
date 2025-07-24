@@ -37,7 +37,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://instalily-lead-gen-frontend.onrender.com/",  # your static frontend URL!
+        "https://instalily-lead-gen-frontend.onrender.com",  
         "http://localhost:3000", 
         "http://127.0.0.1:3000"
     ],
