@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Users,
   TrendingUp,
@@ -93,41 +93,41 @@ const App = () => {
   const [sortBy, setSortBy] = useState('qualification_score');
 
   // API functions (with fallbacks to mock data)
-  const fetchDashboardStats = async () => {
-    try {
-      const response = await fetch(`${API_BASE}/api/dashboard`);
-      if (response.ok) {
-        const data = await response.json();
-        setDashboardStats(data);
-      }
-    } catch (error) {
-      console.log('Using mock dashboard data');
+  const fetchDashboardStats = useCallback(async () => {
+  try {
+    const response = await fetch(`${API_BASE}/api/dashboard`);
+    if (response.ok) {
+      const data = await response.json();
+      setDashboardStats(data);
     }
-  };
+  } catch (error) {
+    console.log('Using mock dashboard data');
+  }
+}, []);
 
-  const fetchLeads = async () => {
-    try {
-      const response = await fetch(`${API_BASE}/api/leads?sort_by=${sortBy}&min_score=${scoreFilter}`);
-      if (response.ok) {
-        const data = await response.json();
-        setLeads(data.leads || mockLeads);
-      }
-    } catch (error) {
-      console.log('Using mock leads data');
+const fetchLeads = useCallback(async () => {
+  try {
+    const response = await fetch(`${API_BASE}/api/leads?sort_by=${sortBy}&min_score=${scoreFilter}`);
+    if (response.ok) {
+      const data = await response.json();
+      setLeads(data.leads || mockLeads);
     }
-  };
+  } catch (error) {
+    console.log('Using mock leads data');
+  }
+}, [sortBy, scoreFilter]);
 
-  const fetchTaskStatus = async () => {
-    try {
-      const response = await fetch(`${API_BASE}/api/task-status`);
-      if (response.ok) {
-        const data = await response.json();
-        setTaskStatus(data);
-      }
-    } catch (error) {
-      console.log('Using mock task status');
+const fetchTaskStatus = useCallback(async () => {
+  try {
+    const response = await fetch(`${API_BASE}/api/task-status`);
+    if (response.ok) {
+      const data = await response.json();
+      setTaskStatus(data);
     }
-  };
+  } catch (error) {
+    console.log('Using mock task status');
+  }
+}, []);
 
   // const startLeadGeneration = async () => {
   //   setIsLoading(true);
