@@ -21,12 +21,12 @@ const API_BASE = 'https://instalily-lead-gen.onrender.com/';
 
 // Mock data for development/demo
 const mockDashboardStats = {
-  total_leads: 47,
-  qualified_leads: 23,
+  total_leads: 21,
+  qualified_leads: 3,
   events_processed: 8,
   companies_analyzed: 156,
-  outreach_generated: 18,
-  average_qualification_score: 0.78
+  outreach_generated: 2,
+  average_qualification_score: 0.86
 };
 
 const mockLeads = [
