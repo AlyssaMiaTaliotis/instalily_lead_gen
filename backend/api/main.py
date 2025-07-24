@@ -259,9 +259,9 @@ async def generate_leads(request: LeadGenerationRequest, background_tasks: Backg
 
 sem = asyncio.Semaphore(1)  # or whatever concurrency limit you want
 
-async def safe_qualify(company, event_context):
-    async with sem:
-        return await lead_qualifier.qualify_lead(company, event_context)
+def safe_qualify(company, event_context):
+    # Remove async; remove 'await'.
+    return lead_qualifier.qualify_lead(company, event_context)
 
 async def run_lead_generation_pipeline(
     target_industries: List[str],
@@ -319,9 +319,8 @@ async def run_lead_generation_pipeline(
         task_status["message"] = "Qualifying leads with AI..."
         task_status["progress"] = 70
         # Prepare input for each lead
-        qualification_tasks = []
-        context_per_company = []      # To store context for each company in the same order
-
+        context_per_company = []
+        qualifications = []
         for company in enriched_companies:
             relevant_events = [e for e in events_data if any(
                 (comp.get('name', '').lower() if isinstance(comp, dict) else getattr(comp, 'name', '').lower()) == company.get('name', '').lower()
@@ -329,11 +328,8 @@ async def run_lead_generation_pipeline(
             )]
             event_context = relevant_events[0] if relevant_events else None
             context_per_company.append((company, event_context))
-            # Schedule the task (safe_qualify is async)
-            qualification_tasks.append(safe_qualify(company, event_context))
-
-        # Run all with concurrency safely limited
-        qualifications = await asyncio.gather(*qualification_tasks)
+            qualification = safe_qualify(company, event_context)
+            qualifications.append(qualification)
 
         qualified_leads = []
         for idx, qualification in enumerate(qualifications):
