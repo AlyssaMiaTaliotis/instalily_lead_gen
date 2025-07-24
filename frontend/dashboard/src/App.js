@@ -9,8 +9,6 @@ import {
   RefreshCw,
   CheckCircle,
   AlertCircle,
-  Clock,
-  Eye,
   Download,
   Filter,
   Search,
@@ -201,10 +199,10 @@ const App = () => {
 };
 
   useEffect(() => {
-    fetchDashboardStats();
-    fetchLeads();
-    fetchTaskStatus();
-  }, [sortBy, scoreFilter]);
+  fetchDashboardStats();
+  fetchLeads();
+  fetchTaskStatus();
+}, [sortBy, scoreFilter, fetchDashboardStats, fetchLeads, fetchTaskStatus]);
 
   // Filter leads based on search term
   const filteredLeads = leads.filter(lead =>
