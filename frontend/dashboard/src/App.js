@@ -17,7 +17,7 @@ import {
   Loader2
 } from 'lucide-react';
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE = 'https://instalily-lead-gen.onrender.com/';
 
 // Mock data for development/demo
 const mockDashboardStats = {
