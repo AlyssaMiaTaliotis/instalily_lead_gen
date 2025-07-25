@@ -290,7 +290,7 @@ async def get_task_status():
 @app.get("/api/dashboard")
 async def get_dashboard_stats() -> DashboardStats:
     """Get dashboard statistics"""
-    qualified_leads = [lead for lead in leads_storage if lead.get('qualification_score', 0) >= 0.75]
+    qualified_leads = [lead for lead in leads_storage if lead.get('qualification_score', 0) >= 0.8]
     avg_score = 0
     if leads_storage:
         total_score = sum(lead.get('qualification_score', 0) for lead in leads_storage)

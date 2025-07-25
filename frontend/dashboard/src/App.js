@@ -355,14 +355,6 @@ const fetchTaskStatus = useCallback(async () => {
                     <Users className="h-4 w-4 text-gray-500 mr-2" />
                     <span>{lead.contact_name || 'Contact name pending'}</span>
                   </div>
-                  {/* <div className="flex items-center">
-                    <span className="text-gray-500 mr-2">Role:</span>
-                    <span>{lead.contact_title || 'Title pending'}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <ExternalLink className="h-4 w-4 text-gray-500 mr-2" />
-                    <span className="text-blue-600">LinkedIn Profile Available</span>
-                  </div> */}
                   <div className="flex items-center">
                     <ExternalLink className="h-4 w-4 text-gray-500 mr-2" />
                     {lead.contact_linkedin ? (
