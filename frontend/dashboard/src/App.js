@@ -129,35 +129,6 @@ const fetchTaskStatus = useCallback(async () => {
   }
 }, []);
 
-  // const startLeadGeneration = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     const response = await fetch(`${API_BASE}/api/generate-leads`, {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({
-  //         target_industries: ['graphics', 'signage', 'printing'],
-  //         max_leads: 50,
-  //         include_outreach: true
-  //       })
-  //     });
-  //     if (response.ok) {
-  //       // Start polling for status updates
-  //       const pollStatus = setInterval(async () => {
-  //         await fetchTaskStatus();
-  //         if (taskStatus.status === 'completed' || taskStatus.status === 'error') {
-  //           clearInterval(pollStatus);
-  //           setIsLoading(false);
-  //           await fetchDashboardStats();
-  //           await fetchLeads();
-  //         }
-  //       }, 2000);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error starting lead generation:', error);
-  //     setIsLoading(false);
-  //   }
-  // };
 
   const startLeadGeneration = async () => {
   setIsLoading(true);
@@ -203,6 +174,15 @@ const fetchTaskStatus = useCallback(async () => {
   fetchLeads();
   fetchTaskStatus();
 }, [sortBy, scoreFilter, fetchDashboardStats, fetchLeads, fetchTaskStatus]);
+
+  useEffect(() => {
+    if (taskStatus.status === 'running') {
+      const interval = setInterval(() => {
+        fetchTaskStatus();
+      }, 2000);
+      return () => clearInterval(interval);
+    }
+  }, [taskStatus.status, fetchTaskStatus]);
 
   // Filter leads based on search term
   const filteredLeads = leads.filter(lead =>
@@ -431,9 +411,9 @@ const fetchTaskStatus = useCallback(async () => {
                   <span className="text-blue-900 font-semibold">Rationale:</span>
                   <ul className="list-disc ml-6 mt-2 text-blue-800 text-sm">
                     <li>
-                      {lead.qualification_score >= 0.8
-                        ? "This lead is qualified as it has a qualification score above 0.8."
-                        : "This lead is not qualified as its qualification score is below 0.8."}
+                      {lead.qualification_score >= 0.80
+                        ? "This lead is qualified as its score is above 0.80. The scoring is based on industry alignment, company size, market potential, technology needs that align with Tedlar benefits, customer base, and growth trajectory."
+                        : "This lead is not qualified as its score is below 0.80. The scoring is based on industry alignment, company size, market potential, technology needs that align with Tedlar benefits, customer base, and growth trajectory."}
                     </li>
                   </ul>
                 </div>

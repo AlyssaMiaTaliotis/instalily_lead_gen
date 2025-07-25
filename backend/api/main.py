@@ -12,7 +12,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Import our custom modules
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
@@ -136,128 +135,8 @@ async def generate_leads(request: LeadGenerationRequest, background_tasks: Backg
         "check_status_at": "/api/task-status"
     }
 
-# async def run_lead_generation_pipeline(
-#     target_industries: List[str],
-#     max_leads: int,
-#     min_company_size: str,
-#     include_outreach: bool
-# ):
-#     """Main pipeline for lead generation"""
-#     global task_status, leads_storage, events_storage, companies_storage, outreach_storage
-#     try:
-#         # Step 1: Scrape Events
-#         task_status["message"] = "Scraping industry events..."
-#         task_status["progress"] = 10
-#         events_data = events_scraper.scrape_industry_events(target_industries)
-#         events_storage.extend(events_data)
-#         logger.info(f"Found {len(events_data)} events")
-#         # Step 2: Extract Companies from Events
-#         task_status["message"] = "Extracting companies from events..."
-#         task_status["progress"] = 30
-#         all_companies = []
-#         for event in events_data:
-#             companies = company_scraper.extract_companies_from_event(event)
-#             all_companies.extend(companies)
-#         # Deduplicate companies by name (case-insensitive)
-#         unique_companies = {}
-#         for company in all_companies:
-#             name = company.get('name', '').strip().lower() if isinstance(company, dict) else getattr(company, 'name', '').strip().lower()
-#             if name and name not in unique_companies:
-#                 unique_companies[name] = company
-#         all_companies = list(unique_companies.values())
 
-#         companies_storage.extend(all_companies)
-#         logger.info(f"Found {len(all_companies)} companies")
-#         # Step 3: Enrich Company Data
-#         task_status["message"] = "Enriching company data..."
-#         task_status["progress"] = 50
-#         enriched_companies = []
-#         for i, company in enumerate(all_companies[:max_leads]):  # Limit processing
-#             enriched = company_scraper.enrich_company_data(company)
-#             enriched_companies.append(enriched)
-#             # Update progress
-#             progress = 50 + (i / min(len(all_companies), max_leads)) * 20
-#             task_status["progress"] = int(progress)
-#         # Step 4: Qualify Leads
-#         task_status["message"] = "Qualifying leads with AI..."
-#         task_status["progress"] = 70
-#         qualified_leads = []
-#         for company in enriched_companies:
-#             # Find relevant event context
-#             relevant_events = [e for e in events_data if any(
-#                 (comp.get('name', '').lower() if isinstance(comp, dict) else getattr(comp, 'name', '').lower()) == company.get('name', '').lower()
-#                 for comp in getattr(e, 'companies', [])
-#             )]
-#             event_context = relevant_events[0] if relevant_events else None
-#             # Qualify the lead
-#             qualification = lead_qualifier.qualify_lead(company, event_context)
-#             if qualification.get('is_qualified', False):
-#                 lead_data = {
-#                     "id": f"lead_{len(qualified_leads)}_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
-#                     "company_name": company.get('name', ''),
-#                     "company_description": company.get('description', ''),
-#                     "company_size": company.get('size', ''),
-#                     "industry": company.get('industry', ''),
-#                     "revenue": company.get('revenue', ''),
-#                     "website": company.get('website', ''),
-#                     "qualification_score": qualification.get('score', 0),
-#                     "qualification_reasons": qualification.get('reasons', []),
-#                     "industry_alignment": qualification.get('industry_alignment', ''),
-#                     "event_context": event_context.get('name', '') if event_context else '',
-#                     "contact_name": company.get('key_contacts', [{}])[0].get('name', ''),
-#                     "contact_title": company.get('key_contacts', [{}])[0].get('title', ''),
-#                     "contact_linkedin": company.get('key_contacts', [{}])[0].get('linkedin', ''),
-#                     "created_at": datetime.now().isoformat()
-#                 }
-#                 qualified_leads.append(lead_data)
-#         leads_storage.extend(qualified_leads)
-#         logger.info(f"Qualified {len(qualified_leads)} leads")
-#         # Step 5: Generate Outreach (if requested)
-#         generated_outreach = []
-#         if include_outreach and qualified_leads:
-#             task_status["message"] = "Generating personalized outreach..."
-#             task_status["progress"] = 80
-#             outreach_results = outreach_generator.generate_bulk_outreach(qualified_leads)
-#             for result in outreach_results:
-#                 if result.get('success', False):
-#                     outreach_data = {
-#                         "id": f"outreach_{result.get('lead_id', 'unknown')}",
-#                         "lead_id": result.get('lead_id'),
-#                         "subject_line": result['data']['subject_line'],
-#                         "primary_message": result['data']['primary_message'],
-#                         "follow_up_sequence": result['data']['follow_up_sequence'],
-#                         "personalization_elements": result['data']['personalization_elements'],
-#                         "generated_at": result['data']['generated_at'],
-#                         "status": "generated"
-#                     }
-#                     generated_outreach.append(outreach_data)
-#             outreach_storage.extend(generated_outreach)
-#         # Complete the task
-#         task_status = {
-#             "current_task": "lead_generation",
-#             "status": "completed",
-#             "progress": 100,
-#             "message": "Lead generation process completed successfully",
-#             "results": {
-#                 "events_found": len(events_data),
-#                 "companies_analyzed": len(all_companies),
-#                 "qualified_leads": len(qualified_leads),
-#                 "outreach_generated": len(generated_outreach),
-#                 "completion_time": datetime.now().isoformat()
-#             }
-#         }
-#         logger.info("Lead generation pipeline completed successfully")
-#     except Exception as e:
-#         logger.error(f"Error in lead generation pipeline: {str(e)}")
-#         task_status = {
-#             "current_task": "lead_generation",
-#             "status": "error",
-#             "progress": 0,
-#             "message": f"Error: {str(e)}",
-#             "results": {}
-#         }
-
-sem = asyncio.Semaphore(1)  # or whatever concurrency limit you want
+sem = asyncio.Semaphore(2) 
 
 def safe_qualify(company, event_context):
     # Remove async; remove 'await'.
@@ -353,11 +232,11 @@ async def run_lead_generation_pipeline(
                     "created_at": datetime.now().isoformat()
                 }
                 qualified_leads.append(lead_data)
-        # leads_storage.extend(qualified_leads)
-        # logger.info(f"Qualified {len(qualified_leads)} leads")
+        leads_storage.extend(qualified_leads)
+        logger.info(f"Qualified {len(qualified_leads)} leads")
 
 
-        # Step 5: Generate Outreach (if requested)
+        # Step 5: Generate Outreach 
         generated_outreach = []
         if include_outreach and qualified_leads:
             task_status["message"] = "Generating personalized outreach..."
@@ -411,7 +290,7 @@ async def get_task_status():
 @app.get("/api/dashboard")
 async def get_dashboard_stats() -> DashboardStats:
     """Get dashboard statistics"""
-    qualified_leads = [lead for lead in leads_storage if lead.get('qualification_score', 0) >= 0.8]
+    qualified_leads = [lead for lead in leads_storage if lead.get('qualification_score', 0) >= 0.75]
     avg_score = 0
     if leads_storage:
         total_score = sum(lead.get('qualification_score', 0) for lead in leads_storage)
